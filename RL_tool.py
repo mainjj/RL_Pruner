@@ -47,14 +47,12 @@ class Env:
         module_name = self.order_to_prune[0]
         self.state = np.array(
             [
-            # self.module_names.index(module_name), # layer의 index
             self.sparsity[module_name], # layer_i의 sparsity ratio
             self.global_sparsity, # model 전체의 sparsity ratio
             0,
             self.resnet.orig_test_acc # test acc
         ]
         )
-        # self._onehot()
          
         return self.state
 
@@ -67,10 +65,8 @@ class Env:
         self.get_sparsity(module_name)
         self.get_sparsity("global")
 
-        # self.resnet.train(epochs=1)
         new_acc = self.resnet.test()
         
-        # reward = -5 * (max(1- self.new_acc/self.resnet.orig_test_acc, 0) + max(1- self.global_sparsity/0.8, 0))
         reward =  5*(self.new_acc/self.resnet.orig_test_acc + self.global_sparsity/0.8)
         
         self.new_acc = new_acc
@@ -85,14 +81,12 @@ class Env:
         
         self.state = np.array(
             [
-            # self.module_names.index(next_module_name),
             self.sparsity[next_module_name], # layer_i의 sparsity ratio
             self.global_sparsity, # model 전체의 sparsity ratio
             self.acc[next_module_name],
             self.new_acc # test acc
         ]
         )
-        # self._onehot()
         
         
 
